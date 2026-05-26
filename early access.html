@@ -30,7 +30,6 @@
       flex-direction: column;
     }
 
-    /* NAV */
     nav {
       display: flex;
       justify-content: space-between;
@@ -60,7 +59,7 @@
       border-radius: 100px;
     }
 
-    /* MAIN */
+    
     main {
       flex: 1;
       display: flex;
@@ -71,7 +70,7 @@
       text-align: center;
     }
 
-    /* EYEBROW */
+    
     .eyebrow {
       font-size: 0.7rem;
       font-weight: 500;
@@ -198,7 +197,7 @@
       border-color: transparent;
     }
 
-    /* shake on error */
+    
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
       20% { transform: translateX(-8px); }
@@ -217,7 +216,7 @@
       color: red;
     }
 
-    /* CTA BUTTON */
+    
     .cta-btn {
       display: inline-flex;
       align-items: center;
@@ -259,7 +258,7 @@
       cursor: not-allowed;
     }
 
-    /* SUCCESS */
+
     .success-state {
       display: none;
       flex-direction: column;
@@ -307,7 +306,7 @@
       color: var(--gray-text);
     }
 
-    /* PERKS */
+    
     .perks {
       display: flex;
       align-items: center;
@@ -340,7 +339,7 @@
         font-style: italic;
     }
 
-    /* FOOTER */
+    
     footer {
       padding: 1.5rem 4rem;
       display: flex;
@@ -376,7 +375,7 @@
       color: var(--black);
     }
 
-    /* KEYFRAMES */
+    
     @keyframes fadeDown {
       from { opacity: 0; transform: translateY(-16px); }
       to { opacity: 1; transform: translateY(0); }
@@ -397,7 +396,7 @@
       to { transform: scale(1); opacity: 1; }
     }
 
-    /* RESPONSIVE */
+    
     @media (max-width: 600px) {
       nav { padding: 1.5rem 1.5rem; }
       footer { padding: 1.25rem 1.5rem; flex-direction: column; gap: 0.75rem; text-align: center; }
@@ -516,7 +515,7 @@
       btn.disabled = true;
       btn.innerHTML = 'Submitting <span class="arrow">...</span>';
 
-      // Replace with your actual form submission logic (Formspree, Mailchimp, etc.)
+      
       setTimeout(() => {
         document.getElementById('formState').style.display = 'none';
         document.getElementById('successState').classList.add('show');
