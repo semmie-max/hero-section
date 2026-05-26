@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Early Access — YourBrand</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0c0c0c;
+      --white: #ffffff;
+      --gray-light: #f5f5f3;
+      --gray-mid: #e0e0dc;
+      --gray-text: #888884;
+      --gray-muted: #b8b8b4;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: var(--white);
+      color: var(--black);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem 4rem;
+      opacity: 0;
+      animation: fadeDown 0.7s ease 0.1s forwards;
+    }
+
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      letter-spacing: 0.02em;
+      color: var(--black);
+      text-decoration: none;
+    }
+
+    .nav-badge {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gray-text);
+      border: 1px solid var(--gray-mid);
+      padding: 5px 14px;
+      border-radius: 100px;
+    }
+
+    /* MAIN */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 2rem 6rem;
+      text-align: center;
+    }
+
+    /* EYEBROW */
+    .eyebrow {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gray-text);
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.3s forwards;
+    }
+    .headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.2rem, 7vw, 6rem);
+      font-weight: 400;
+      line-height: 1.08;
+      color: var(--black);
+      margin-bottom: 1.75rem;
+      max-width: 700px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.45s forwards;
+    }
+    .word-swap {
+      display: inline-block;
+      font-style: italic;
+      color: var(--black);
+      position: relative;
+      overflow: hidden;
+      vertical-align: bottom;
+      min-width: 5ch;
+    }
+
+    .word-swap .word {
+      display: block;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      transform: translateY(110%);
+      opacity: 0;
+      transition: transform 2.55s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease;
+    }
+
+    .word-swap .word.active {
+      transform: translateY(0);
+      opacity: 1;
+      position: relative;
+    }
+
+    .word-swap .word.exit {
+      transform: translateY(-110%);
+      opacity: 0;
+      position: absolute;
+    }
+    .sub {
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.75;
+      color: var(--gray-text);
+      max-width: 420px;
+      margin: 0 auto 3.5rem;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.6s forwards;
+    }
+    .email-section {
+      width: 100%;
+      max-width: 460px;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.75s forwards;
+    }
+
+    .email-label {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: black;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .email-field {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+
+    .email-field::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 1.5px;
+      background: var(--black);
+      transition: width 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    .email-field:focus-within::after {
+      width: 100%;
+    }
+
+    .email-input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--gray-mid);
+      outline: none;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--black);
+      padding: 0.75rem 0;
+      text-align: center;
+      letter-spacing: 0.01em;
+      transition: border-color 0.3s ease;
+    }
+
+    .email-input::placeholder {
+      color: var(--gray-muted);
+      font-weight: 300;
+    }
+
+    .email-input:focus {
+      border-color: transparent;
+    }
+
+    /* shake on error */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-5px); }
+      80% { transform: translateX(5px); }
+    }
+
+    .email-input.error {
+      animation: shake 0.4s ease;
+      border-color: #e24b4a;
+      color: red;
+    }
+
+    .email-input.error::placeholder {
+      color: red;
+    }
+
+    /* CTA BUTTON */
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      border-radius: 100px;
+      padding: 14px 36px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, gap 0.3s ease;
+      margin-top: 0.25rem;
+    }
+
+    .cta-btn .arrow {
+      display: inline-block;
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    .cta-btn:hover {
+      background: #222;
+      gap: 16px;
+    }
+
+    .cta-btn:hover .arrow {
+      transform: translateX(4px);
+    }
+
+    .cta-btn:active {
+      transform: scale(0.97);
+    }
+
+    .cta-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* SUCCESS */
+    .success-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .success-state.show {
+      display: flex;
+      animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
+    }
+
+    .success-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.25rem;
+      animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    }
+
+    .success-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--white);
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .success-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--black);
+    }
+
+    .success-sub {
+      font-size: 0.85rem;
+      font-weight: 300;
+      color: var(--gray-text);
+    }
+
+    /* PERKS */
+    .perks {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 3.5rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp 0.7s ease 0.9s forwards;
+    }
+
+    .perk {
+      font-size: 0.78rem;
+      font-weight: 300;
+      color: black;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .perk-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--gray-mid);
+      flex-shrink: 0;
+    }
+    strong {
+        color: #000;
+        font-style: italic;
+    }
+
+    /* FOOTER */
+    footer {
+      padding: 1.5rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--gray-mid);
+      opacity: 0;
+      animation: fadeIn 0.7s ease 1.1s forwards;
+    }
+
+    .footer-text {
+      font-size: 0.72rem;
+      font-weight: 300;
+      color: black;
+      letter-spacing: 0.03em;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-links a {
+      font-size: 0.72rem;
+      font-weight: 300;
+      color: var(--gray-muted);
+      text-decoration: none;
+      letter-spacing: 0.03em;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: var(--black);
+    }
+
+    /* KEYFRAMES */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.4); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 600px) {
+      nav { padding: 1.5rem 1.5rem; }
+      footer { padding: 1.25rem 1.5rem; flex-direction: column; gap: 0.75rem; text-align: center; }
+      .perks { gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="logo">TixTy</a>
+    <span class="nav-badge">Coming To You Soon</span>
+  </nav>
+
+  <main>
+
+    <p class="eyebrow">Early Access</p>
+
+    <h1 class="headline">
+      Your tickets,<br/>
+      <span class="word-swap" id="wordSwap" aria-label="effortlessly">
+        <span class="word active" id="w0">effortlessly</span>
+        <span class="word" id="w1">seamlessly</span>
+        <span class="word" id="w2">instantly</span>
+        <span class="word" id="w3">beautifully</span>
+      </span>
+      <br/>yours.
+    </h1>
+
+    <p class="sub">
+      We're building the smartest way to buy and sell event tickets.
+      Drop your <strong>Email</strong>. Be first when we launch.
+    </p>
+
+    <div class="email-section">
+
+      <div id="formState">
+        <label class="email-label" for="emailInput">Your email address</label>
+        <div class="email-field">
+          <input
+            type="email"
+            id="emailInput"
+            class="email-input"
+            placeholder="tixty@example.com"
+            autocomplete="email"
+          />
+        </div>
+        <button class="cta-btn" id="ctaBtn" onclick="handleSubmit()">
+          Get Early Access <span class="arrow">→</span>
+        </button>
+      </div>
+
+      <div class="success-state" id="successState">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <p class="success-title">You're on the list.</p>
+        <p class="success-sub">Beat the crowd. We'll reach out first..</p>
+      </div>
+
+    </div>
+
+    <div class="perks">
+      <div class="perk"><div class="perk-dot"></div>First access to the platform</div>
+      <div class="perk"><div class="perk-dot"></div>Exclusive launch pricing</div>
+      <div class="perk"><div class="perk-dot"></div>Shape the product early</div>
+    </div>
+
+  </main>
+
+  <footer>
+    <span class="footer-text">© 2026 TixTy. All rights reserved.</span>
+    <div class="footer-links">
+      <a href="mailto:tixty@gmail.com">Contact</a>
+    </div>
+  </footer>
+
+  <script>
+    const words = document.querySelectorAll('.word');
+    let current = 0;
+
+    function cycleWord() {
+      const prev = current;
+      current = (current + 1) % words.length;
+
+      words[prev].classList.remove('active');
+      words[prev].classList.add('exit');
+
+      setTimeout(() => {
+        words[prev].classList.remove('exit');
+      }, 550);
+
+      words[current].classList.add('active');
+    }
+
+    setInterval(cycleWord, 2400);
+
+    
+    function handleSubmit() {
+      const input = document.getElementById('emailInput');
+      const btn = document.getElementById('ctaBtn');
+      const email = input.value.trim();
+      const emailReg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!emailReg.test(email)) {
+        input.classList.add('error');
+        input.value = '';
+        input.placeholder = 'Enter a valid email please';
+        setTimeout(() => {
+          input.classList.remove('error');
+          input.placeholder = 'you@example.com';
+        }, 2200);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = 'Submitting <span class="arrow">...</span>';
+
+      // Replace with your actual form submission logic (Formspree, Mailchimp, etc.)
+      setTimeout(() => {
+        document.getElementById('formState').style.display = 'none';
+        document.getElementById('successState').classList.add('show');
+      }, 900);
+    }
+
+    document.getElementById('emailInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') handleSubmit();
+    });
+  </script>
+
+</body>
+</html>
